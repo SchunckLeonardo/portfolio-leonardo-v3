@@ -2,11 +2,12 @@ import Image from 'next/image'
 import { SelectInput } from '@/components/Select/select-input'
 import { SelectInputItem } from '@/components/Select/select-item'
 import { Button } from '@/components/button'
+import { TimeNow } from '@/components/time-now'
 
 export default function Home() {
   return (
     <>
-      <h1 className="text-8xl font-light text-white">16:30</h1>
+      <TimeNow />
       <h2 className="mt-2 text-4xl font-extralight text-white">
         05 de junho, 2024
       </h2>
