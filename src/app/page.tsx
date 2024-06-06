@@ -3,13 +3,16 @@ import { SelectInput } from '@/components/Select/select-input'
 import { SelectInputItem } from '@/components/Select/select-item'
 import { Button } from '@/components/button'
 import { TimeNow } from '@/components/time-now'
+import { getCurrentDate } from '@/utils/get-current-date'
 
 export default function Home() {
+  const currentDate = getCurrentDate()
+
   return (
     <>
       <TimeNow />
       <h2 className="mt-2 text-4xl font-extralight text-white">
-        05 de junho, 2024
+        {currentDate}
       </h2>
       <figure className="h-logo w-logo shadow-logoShadow relative my-16 overflow-hidden rounded-full">
         <Image
