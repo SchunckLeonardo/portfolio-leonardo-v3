@@ -23,7 +23,7 @@ export default function RootLayout({
             backgroundImage: "url('/images/windows-11-screen.jpg')",
           }}
         >
-          <div className="backdrop-blur-background flex h-full w-full flex-col items-center justify-center text-center">
+          <div className="flex h-full w-full flex-col items-center justify-center text-center backdrop-blur-background">
             {children}
           </div>
         </main>

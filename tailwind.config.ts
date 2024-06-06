@@ -16,9 +16,13 @@ const config: Config = {
       },
       boxShadow: {
         logoShadow: '0px 3px 16.1px 7px rgba(0, 0, 0, 0.38)',
+        hoverShadow: '0px 3px 24.1px 7px rgba(0, 0, 0, 0.38)',
       },
       backgroundColor: {
         glass: 'rgba(176, 173, 198, 0.31)',
+      },
+      transitionProperty: {
+        slideUp: 'transform 1s',
       },
     },
   },
