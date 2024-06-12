@@ -1,9 +1,11 @@
 'use client'
 
 import { getHourMinute } from '@/utils/get-hour-minute'
-import { useEffect, useState } from 'react'
+import { ComponentProps, useEffect, useState } from 'react'
 
-export function TimeNow() {
+interface TimeNowProps extends ComponentProps<'h1'> {}
+
+export function TimeNow({ ...props }: TimeNowProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [hour, minutes] = getHourMinute(currentDate)
 
@@ -14,7 +16,7 @@ export function TimeNow() {
   }, [currentDate])
 
   return (
-    <h1 className="text-8xl font-light text-white">
+    <h1 {...props}>
       {hour}:{minutes}
     </h1>
   )

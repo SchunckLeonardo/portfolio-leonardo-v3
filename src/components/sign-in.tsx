@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation'
 
 export function SignIn() {
   const [signedIn, setSignedIn] = useState(false)
-  const currentDate = getCurrentDate()
+  const { PPP: currentDate } = getCurrentDate()
   const { push } = useRouter()
 
   async function handleSigned() {
@@ -24,7 +24,7 @@ export function SignIn() {
     <div
       className={`flex h-full w-full flex-col items-center justify-center transition-slideUp ${signedIn ? '-translate-y-full' : ''}`}
     >
-      <TimeNow />
+      <TimeNow className="text-6xl font-light text-white" />
       <h2 className="mt-2 text-4xl font-extralight text-white">
         {currentDate}
       </h2>
