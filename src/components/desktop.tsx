@@ -4,6 +4,7 @@ import { Brain } from './svg/brain'
 import { Programmer } from './svg/programmer'
 import { Repositories } from './svg/repositories'
 import Image from 'next/image'
+import { ProgressBar } from './progress-bar'
 
 export function Desktop() {
   return (
@@ -47,11 +48,7 @@ export function Desktop() {
             </div>
           </header>
 
-          <div className="h-1 w-full rounded-full bg-zinc-200">
-            <div className="relative h-full w-3/4 rounded-full bg-blue-950">
-              <span className="absolute right-0 top-2/4 h-3 w-3 -translate-y-2/4 rounded-full bg-blue-950"></span>
-            </div>
-          </div>
+          <ProgressBar progress={60} />
 
           <footer className="flex items-center justify-center gap-7 text-white">
             <button className="p-1">
