@@ -8,7 +8,7 @@ export function NavBar() {
   const { P: currentDate } = getCurrentDate()
 
   return (
-    <nav className="shadow-navShadow h-nav animate-navbar flex items-end justify-between bg-glass px-5 py-2.5">
+    <nav className="flex h-nav animate-navbar items-end justify-between bg-glass px-5 py-2.5 shadow-navShadow">
       <div className="flex h-full items-center justify-center gap-2.5">
         <Button variant="icon">
           <SiWindows size={30} className="text-white" />

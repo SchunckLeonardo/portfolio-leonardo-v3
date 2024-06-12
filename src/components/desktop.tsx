@@ -8,8 +8,8 @@ import { ProgressBar } from './progress-bar'
 
 export function Desktop() {
   return (
-    <div className="grid-cols-desktop grid h-full w-full px-8 py-10">
-      <section className="animate-fadeIn flex flex-col items-start gap-12 text-white">
+    <div className="grid h-full w-full grid-cols-desktop px-8 py-10">
+      <section className="flex animate-fadeIn flex-col items-start gap-12 text-white">
         <Button
           variant="icon"
           className="flex w-28 flex-col items-center justify-center gap-2"
@@ -33,11 +33,11 @@ export function Desktop() {
         </Button>
       </section>
       <section>
-        <div className="bg-popup rounded-popup flex w-full flex-col gap-7 px-6 py-4">
+        <div className="flex w-full flex-col gap-7 rounded-popup bg-popup px-6 py-4">
           <header className="flex h-full w-full gap-3">
             <Image
               src="/images/album-imagine-dragons.jpg"
-              className="shadow-album rounded-lg"
+              className="rounded-lg shadow-album"
               width={56}
               height={56}
               alt="Bad Liar album image"

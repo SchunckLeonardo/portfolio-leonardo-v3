@@ -10,7 +10,7 @@ interface SelectInputItemProps extends Select.SelectItemProps {
 export function SelectInputItem({ text, ...props }: SelectInputItemProps) {
   return (
     <Select.Item
-      className="data-[highlighted]:bg-glass/20 flex items-center justify-between px-3 py-2.5 text-white outline-none"
+      className="flex items-center justify-between px-3 py-2.5 text-white outline-none data-[highlighted]:bg-glass/20"
       {...props}
     >
       <Select.ItemText>{text}</Select.ItemText>
