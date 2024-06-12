@@ -19,9 +19,11 @@ const config: Config = {
         logoShadow: '0px 3px 16.1px 7px rgba(0, 0, 0, 0.38)',
         hoverShadow: '0px 3px 24.1px 7px rgba(0, 0, 0, 0.38)',
         navShadow: '0px -3px 5.7px 2px rgba(0, 0, 0, 0.25)',
+        album: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
       },
       backgroundColor: {
         glass: 'rgba(176, 173, 198, 0.31)',
+        popup: 'rgba(176, 173, 198, 0.50)',
       },
       transitionProperty: {
         slideUp: 'transform 1s',
@@ -42,6 +44,12 @@ const config: Config = {
       animation: {
         navbar: 'slideUpAndShown 1s cubic-bezier(.16, 1, .3, 1)',
         fadeIn: 'fadeIn 1s cubic-bezier(.16, 1, .3, 1)',
+      },
+      gridTemplateColumns: {
+        desktop: '1fr 500px',
+      },
+      borderRadius: {
+        popup: '24px',
       },
     },
   },
