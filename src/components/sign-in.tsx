@@ -7,14 +7,22 @@ import { SelectInputItem } from './Select/select-item'
 import { TimeNow } from './time-now'
 import Image from 'next/image'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export function SignIn() {
   const [signedIn, setSignedIn] = useState(false)
   const currentDate = getCurrentDate()
+  const { push } = useRouter()
+
+  async function handleSigned() {
+    setSignedIn(true)
+    await new Promise((resolve) => setInterval(resolve, 1000))
+    push('/signed')
+  }
 
   return (
     <div
-      className={`transition-slideUp flex h-full w-full flex-col items-center justify-center ${signedIn ? '-translate-y-full' : ''}`}
+      className={`flex h-full w-full flex-col items-center justify-center transition-slideUp ${signedIn ? '-translate-y-full' : ''}`}
     >
       <TimeNow />
       <h2 className="mt-2 text-4xl font-extralight text-white">
@@ -30,7 +38,7 @@ export function SignIn() {
         />
       </figure>
       <Button
-        onClick={() => setSignedIn(true)}
+        onClick={handleSigned}
         type="button"
         variant="glass"
         textSize="2xl"
