@@ -34,9 +34,14 @@ const config: Config = {
           from: { transform: 'translateY(150px)', opacity: '0' },
           to: { transform: 'translateY(0)', opacity: '1' },
         },
+        fadeIn: {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
       },
       animation: {
         navbar: 'slideUpAndShown 1s cubic-bezier(.16, 1, .3, 1)',
+        fadeIn: 'fadeIn 1s cubic-bezier(.16, 1, .3, 1)',
       },
     },
   },

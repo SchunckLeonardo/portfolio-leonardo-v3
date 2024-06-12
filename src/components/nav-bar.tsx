@@ -2,6 +2,7 @@ import { getCurrentDate } from '@/utils/get-current-date'
 import { FaWifi } from 'react-icons/fa'
 import { SiGithub, SiLinkedin, SiMedium, SiWindows } from 'react-icons/si'
 import { TimeNow } from './time-now'
+import { Button } from './button'
 
 export function NavBar() {
   const { P: currentDate } = getCurrentDate()
@@ -9,27 +10,27 @@ export function NavBar() {
   return (
     <nav className="shadow-navShadow h-nav animate-navbar flex items-end justify-between bg-glass px-5 py-2.5">
       <div className="flex h-full items-center justify-center gap-2.5">
-        <button className="rounded-lg bg-transparent p-2 transition-all hover:bg-zinc-100/15">
+        <Button variant="icon">
           <SiWindows size={30} className="text-white" />
-        </button>
+        </Button>
         <a
           href="https://github.com/SchunckLeonardo"
           target="__blank"
-          className="rounded-lg bg-transparent p-2 transition-all hover:bg-zinc-100/15"
+          className="rounded-lg bg-transparent p-2 leading-none transition-all hover:bg-zinc-100/15"
         >
           <SiGithub size={30} />
         </a>
         <a
           href="https://www.linkedin.com/in/leonardo-schunck-rainha-a08468202/"
           target="__blank"
-          className="rounded-lg bg-transparent p-2 transition-all hover:bg-zinc-100/15"
+          className="rounded-lg bg-transparent p-2 leading-none transition-all hover:bg-zinc-100/15"
         >
           <SiLinkedin size={30} className="text-linkedin" />
         </a>
         <a
           href="https://medium.com/@schunckrainhaleonardo"
           target="__blank"
-          className="rounded-lg bg-transparent p-2 transition-all hover:bg-zinc-100/15"
+          className="rounded-lg bg-transparent p-2 leading-none transition-all hover:bg-zinc-100/15"
         >
           <SiMedium size={30} className="text-white" />
         </a>

@@ -1,11 +1,14 @@
 import { ComponentProps } from 'react'
+import { twMerge } from 'tailwind-merge'
 import { tv, VariantProps } from 'tailwind-variants'
 
 const button = tv({
-  base: 'cursor-pointer rounded-lg font-light transition-all px-16 py-3',
+  base: 'cursor-pointer rounded-lg font-light transition-all',
   variants: {
     variant: {
-      glass: 'bg-glass border border-white hover:brightness-90 text-white',
+      glass:
+        'bg-glass border border-white hover:brightness-90 text-white px-16 py-3',
+      icon: 'p-2 leading-none hover:bg-zinc-100/15',
     },
     textSize: {
       lg: 'text-lg',
@@ -24,6 +27,9 @@ export function Button({
   ...props
 }: ButtonProps) {
   return (
-    <button {...props} className={button({ variant, textSize, className })} />
+    <button
+      {...props}
+      className={twMerge([button({ variant, textSize }), className])}
+    />
   )
 }
