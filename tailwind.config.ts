@@ -10,10 +10,12 @@ const config: Config = {
       width: {
         logo: '204px',
         select: '124px',
+        popup: '80vw',
       },
       height: {
         logo: '204px',
         nav: '55px',
+        popup: '80vh',
       },
       boxShadow: {
         logoShadow: '0px 3px 16.1px 7px rgba(0, 0, 0, 0.38)',
@@ -40,16 +42,24 @@ const config: Config = {
           from: { opacity: '0' },
           to: { opacity: '1' },
         },
+        contentShow: {
+          from: { opacity: '0', transform: 'translate(-50%, -48%) scale(.96)' },
+          to: { opacity: '1', transform: 'translate(-50%, -50%) scale(1)' },
+        },
       },
       animation: {
         navbar: 'slideUpAndShown 1s cubic-bezier(.16, 1, .3, 1)',
         fadeIn: 'fadeIn 1s cubic-bezier(.16, 1, .3, 1)',
+        content: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
       },
       gridTemplateColumns: {
         desktop: '1fr 500px',
       },
       borderRadius: {
         popup: '24px',
+      },
+      fontFamily: {
+        ibm: 'var(--ibm)',
       },
     },
   },

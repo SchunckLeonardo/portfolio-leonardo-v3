@@ -1,43 +1,20 @@
 import { Pause, SkipBack, SkipForward } from 'lucide-react'
-import { Button } from './button'
-import { Brain } from './svg/brain'
-import { Programmer } from './svg/programmer'
-import { Repositories } from './svg/repositories'
 import Image from 'next/image'
 import { ProgressBar } from './progress-bar'
+import { DesktopApps } from './desktop-apps'
 
 export function Desktop() {
   return (
     <div className="grid h-full w-full grid-cols-desktop px-8 py-10">
       <section className="flex animate-fadeIn flex-col items-start gap-12 text-white">
-        <Button
-          variant="icon"
-          className="flex w-28 flex-col items-center justify-center gap-2"
-        >
-          <Repositories />
-          <span>Repositories</span>
-        </Button>
-        <Button
-          variant="icon"
-          className="flex w-28 flex-col items-center justify-center gap-2"
-        >
-          <Programmer />
-          <span>About me</span>
-        </Button>
-        <Button
-          variant="icon"
-          className="flex w-28 flex-col items-center justify-center gap-2"
-        >
-          <Brain />
-          <span>Skills</span>
-        </Button>
+        <DesktopApps />
       </section>
       <section>
         <div className="flex w-full flex-col gap-7 rounded-popup bg-popup px-6 py-4">
           <header className="flex h-full w-full gap-3">
             <Image
               src="/images/album-imagine-dragons.jpg"
-              className="rounded-lg shadow-album"
+              className="h-16 w-16 rounded-lg shadow-album"
               width={56}
               height={56}
               alt="Bad Liar album image"

@@ -1,11 +1,18 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+// eslint-disable-next-line camelcase
+import { Inter, IBM_Plex_Sans } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
+const ibm = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--ibm',
+})
+
 export const metadata: Metadata = {
-  title: 'Leocodelab Portfolio',
+  title: 'Leocodelab',
   description: 'Leonardo Schunck Rainha Portfolio',
 }
 
@@ -16,9 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} ${ibm.variable}`}>
         <main
-          className="h-screen bg-blue-950 bg-cover bg-center bg-no-repeat"
+          className="h-screen bg-blue-950 bg-cover bg-center bg-no-repeat antialiased"
           style={{
             backgroundImage: "url('/images/windows-11-screen.jpg')",
           }}
