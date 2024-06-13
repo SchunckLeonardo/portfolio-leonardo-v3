@@ -7,6 +7,7 @@ import { Brain } from './svg/brain'
 import { Programmer } from './svg/programmer'
 import { Repositories } from './svg/repositories'
 import { ArrowDownToLine } from 'lucide-react'
+import { TabsSkills } from './Tabs/tabs'
 
 export function DesktopApps() {
   return (
@@ -31,22 +32,28 @@ export function DesktopApps() {
             className="flex w-28 flex-col items-center justify-center gap-2"
           >
             <Programmer />
-            <span>About me</span>
+            <span>Sobre mim</span>
           </Button>
         }
       >
-        <div className="flex h-full w-full">
-          <figure className="flex h-full w-1/3 items-start justify-center">
+        <div className="flex h-full w-full gap-5">
+          <section className="flex h-full w-1/3 flex-col items-center justify-start rounded-lg bg-slate-800 shadow-lg">
             <Image
               width={484}
               height={600}
               className="object-contain"
-              src="/images/logo_icon.png"
+              src="/images/logo.png"
               alt=""
             />
-          </figure>
+            <div className="flex flex-col items-center justify-center gap-3">
+              <h1 className="text-2xl font-semibold">
+                Leonardo Schunck Rainha
+              </h1>
+              <h3 className="text-zinc-200">São Paulo, Brasil</h3>
+            </div>
+          </section>
           <section className="flex w-2/3 flex-col gap-10">
-            <h3 className="font-dancing text-5xl">Leonardo Schunck Rainha</h3>
+            <h3 className="font-ibm text-5xl">Sobre mim</h3>
             <div className="flex flex-col gap-4 text-lg text-zinc-300">
               <p>
                 Olá! Eu sou o Leonardo Schunck Rainha, estudante de Engenharia
@@ -91,11 +98,13 @@ export function DesktopApps() {
             className="flex w-28 flex-col items-center justify-center gap-2"
           >
             <Brain />
-            <span>Skills</span>
+            <span>Habilidades</span>
           </Button>
         }
       >
-        content
+        <div>
+          <TabsSkills />
+        </div>
       </DesktopDialog>
     </>
   )

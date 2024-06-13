@@ -14,7 +14,7 @@ export function Desktop() {
           <header className="flex h-full w-full gap-3">
             <Image
               src="/images/album-imagine-dragons.jpg"
-              className="rounded-lg shadow-album"
+              className="h-16 w-16 rounded-lg shadow-album"
               width={56}
               height={56}
               alt="Bad Liar album image"

@@ -59,7 +59,7 @@ const config: Config = {
         popup: '24px',
       },
       fontFamily: {
-        dancing: 'var(--dancing)',
+        ibm: 'var(--ibm)',
       },
     },
   },

@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
 // eslint-disable-next-line camelcase
-import { Inter, Dancing_Script } from 'next/font/google'
+import { Inter, IBM_Plex_Sans } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const dancing = Dancing_Script({
+const ibm = IBM_Plex_Sans({
   subsets: ['latin'],
-  variable: '--dancing',
+  weight: ['400'],
+  variable: '--ibm',
 })
 
 export const metadata: Metadata = {
@@ -22,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${dancing.variable}`}>
+      <body className={`${inter.className} ${ibm.variable}`}>
         <main
           className="h-screen bg-blue-950 bg-cover bg-center bg-no-repeat antialiased"
           style={{
