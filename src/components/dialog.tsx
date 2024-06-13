@@ -13,7 +13,7 @@ export function DesktopDialog({ children, trigger }: DesktopDialogProps) {
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed left-0 top-0 h-full w-full bg-zinc-900/15" />
-        <Dialog.Content className="h-popup w-popup animate-content fixed left-2/4 top-2/4 z-10 -translate-x-2/4 -translate-y-2/4 rounded-lg bg-zinc-800 p-5 text-white">
+        <Dialog.Content className="h-popup w-popup animate-content fixed left-2/4 top-2/4 z-10 -translate-x-2/4 -translate-y-2/4 rounded-lg bg-slate-900 p-16 text-white">
           {children}
 
           <Dialog.Close asChild>

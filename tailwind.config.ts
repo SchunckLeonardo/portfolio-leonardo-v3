@@ -58,6 +58,9 @@ const config: Config = {
       borderRadius: {
         popup: '24px',
       },
+      fontFamily: {
+        dancing: 'var(--dancing)',
+      },
     },
   },
   plugins: [],
