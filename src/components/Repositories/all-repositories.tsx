@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { useEffect, useState } from 'react'
 import { RepositorieItem } from './repositorie-item'
+import useSWR from 'swr'
 
 interface Repositorie {
   id: number
@@ -10,31 +11,36 @@ interface Repositorie {
   description: string
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
 export function AllRepositories() {
-  const [repositories, setRepositories] = useState<Repositorie[]>()
+  const { data, isLoading, error } = useSWR<Repositorie[]>(
+    'https://api.github.com/users/SchunckLeonardo/repos?sort=created',
+    fetcher,
+  )
 
-  useEffect(() => {
-    fetch('https://api.github.com/users/SchunckLeonardo/repos?sort=created')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        return response.json()
-      })
-      .then((data) => {
-        setRepositories(data)
-      })
-      .catch((error) => {
-        console.error('Fetch error:', error) // Log any errors for debugging
-      })
-  }, [])
+  if (error) return <p>Erro ao carregar repositórios</p>
 
-  return repositories?.map((repositorie) => (
+  if (isLoading)
+    return Array.from({ length: 25 }).map((_, i) => (
+      <div
+        className="flex h-32 w-full flex-col gap-3 overflow-hidden rounded-lg border border-zinc-100 bg-zinc-800/30 p-5 shadow-lg transition-all hover:scale-105 hover:brightness-150"
+        key={i}
+      >
+        <span className="h-4 w-3/4 animate-pulse rounded-full bg-slate-700" />
+        <div className="flex h-full w-full flex-col gap-1">
+          <span className="h-2 w-full animate-pulse rounded-full bg-slate-700" />
+          <span className="h-2 w-full animate-pulse rounded-full bg-slate-700" />
+        </div>
+      </div>
+    ))
+
+  return data!.map((repositories) => (
     <RepositorieItem
-      key={repositorie.id}
-      link={repositorie.html_url}
-      title={repositorie.full_name}
-      description={repositorie.description}
+      key={repositories.id}
+      link={repositories.html_url}
+      title={repositories.full_name}
+      description={repositories.description}
     />
   ))
 }
