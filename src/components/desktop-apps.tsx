@@ -8,6 +8,8 @@ import { Programmer } from './svg/programmer'
 import { Repositories } from './svg/repositories'
 import { ArrowDownToLine } from 'lucide-react'
 import { TabsSkills } from './Tabs/tabs'
+import { AllRepositories } from './Repositories/all-repositories'
+import { Scroll } from './scroll-area'
 
 export function DesktopApps() {
   return (
@@ -19,11 +21,18 @@ export function DesktopApps() {
             className="flex w-28 flex-col items-center justify-center gap-2"
           >
             <Repositories />
-            <span>Repositories</span>
+            <span>Repositórios</span>
           </Button>
         }
       >
-        content
+        <div className="flex h-full flex-col items-center gap-5">
+          <h2 className="text-3xl">Repositórios de Leonardo Schunck Rainha</h2>
+          <Scroll>
+            <div className="grid h-full w-full grid-cols-4 gap-3 overflow-hidden p-5">
+              <AllRepositories />
+            </div>
+          </Scroll>
+        </div>
       </DesktopDialog>
       <DesktopDialog
         trigger={

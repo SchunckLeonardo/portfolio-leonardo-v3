@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import { blackA, mauve, violet } from '@radix-ui/colors'
 
 const config: Config = {
   content: ['./src/**/*.tsx'],
@@ -32,6 +33,9 @@ const config: Config = {
       },
       colors: {
         linkedin: '#0288D1',
+        ...blackA,
+        ...mauve,
+        ...violet,
       },
       keyframes: {
         slideUpAndShown: {
