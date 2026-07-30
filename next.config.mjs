@@ -1,7 +1,10 @@
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    github_key: process.env.GITHUB_KEY,
+  turbopack: {
+    root: dirname(fileURLToPath(import.meta.url)),
   },
 }
 

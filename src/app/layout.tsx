@@ -1,19 +1,45 @@
-import type { Metadata } from 'next'
-// eslint-disable-next-line camelcase
-import { Inter, IBM_Plex_Sans } from 'next/font/google'
+import '@fontsource-variable/inter'
+import '@fontsource-variable/jetbrains-mono'
+import '@fontsource-variable/space-grotesk'
+import type { Metadata, Viewport } from 'next'
+
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
-
-const ibm = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['400'],
-  variable: '--ibm',
-})
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
 
 export const metadata: Metadata = {
-  title: 'Leocodelab',
-  description: 'Leonardo Schunck Rainha Portfolio',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'Leonardo Schunck Rainha · Backend & Software Engineer',
+    template: '%s · LeoCode OS',
+  },
+  description:
+    'Portfólio de Leonardo Schunck Rainha: backend, sistemas distribuídos, cloud, IA aplicada e experiências interativas.',
+  applicationName: 'LeoCode OS',
+  authors: [{ name: 'Leonardo Schunck Rainha' }],
+  creator: 'Leonardo Schunck Rainha',
+  openGraph: {
+    type: 'website',
+    siteName: 'LeoCode OS',
+    title: 'Leonardo Schunck Rainha · Backend & Software Engineer',
+    description:
+      'Sistemas robustos. Experiências memoráveis. Explore projetos, arquitetura e trajetória.',
+    images: ['/og.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'LeoCode OS · Leonardo Schunck Rainha',
+    description: 'Backend engineering, architecture and interactive systems.',
+    images: ['/og.png'],
+  },
+  icons: { icon: '/icon.svg' },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#070a12',
+  colorScheme: 'dark',
 }
 
 export default function RootLayout({
@@ -22,19 +48,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} ${ibm.variable}`}>
-        <main
-          className="h-screen bg-blue-950 bg-cover bg-center bg-no-repeat antialiased"
-          style={{
-            backgroundImage: "url('/images/windows-11-screen.jpg')",
-          }}
-        >
-          <div className="flex h-full w-full flex-col items-center justify-center text-center backdrop-blur-background">
-            {children}
-          </div>
-        </main>
-      </body>
+    <html lang="pt-BR">
+      <body>{children}</body>
     </html>
   )
 }

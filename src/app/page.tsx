@@ -1,9 +1,5 @@
-import { SignIn } from '@/components/sign-in'
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  return (
-    <>
-      <SignIn />
-    </>
-  )
+  redirect('/pt')
 }

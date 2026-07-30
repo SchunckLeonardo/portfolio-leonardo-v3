@@ -1,0 +1,209 @@
+'use client'
+
+import { AdaptiveDpr, Float, Line, Sparkles } from '@react-three/drei'
+import { Canvas, ThreeEvent, useFrame } from '@react-three/fiber'
+import { useMemo, useRef } from 'react'
+import * as THREE from 'three'
+
+import type { ProjectSlug, VisualSceneState } from '@/types/portfolio'
+
+interface ThreeSceneProps {
+  state: VisualSceneState
+  paused: boolean
+  onProjectSelect: (slug: ProjectSlug) => void
+}
+
+const projectNodes: Array<{
+  slug: ProjectSlug
+  color: string
+  position: [number, number, number]
+}> = [
+  { slug: 'yomora', color: '#8b5cf6', position: [-3.2, 1.8, 0.2] },
+  { slug: 'hermes-news', color: '#22d3ee', position: [3.5, 1.15, -0.5] },
+  { slug: 'solar-beat-lab', color: '#f472b6', position: [-2.5, -2, 0.7] },
+  {
+    slug: 'orbitafire-vision',
+    color: '#fb923c',
+    position: [3, -1.85, -0.3],
+  },
+]
+
+function Core({ reducedMotion }: { reducedMotion: boolean }) {
+  const group = useRef<THREE.Group>(null)
+  const inner = useRef<THREE.Mesh>(null)
+
+  useFrame((state, delta) => {
+    if (reducedMotion) return
+    if (group.current) {
+      group.current.rotation.y += delta * 0.18
+      group.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.25) * 0.1
+    }
+    if (inner.current) inner.current.rotation.z -= delta * 0.32
+  })
+
+  return (
+    <group ref={group}>
+      <mesh>
+        <torusKnotGeometry args={[1.12, 0.16, 180, 18, 2, 3]} />
+        <meshStandardMaterial
+          color="#8b5cf6"
+          emissive="#6d28d9"
+          emissiveIntensity={2.4}
+          metalness={0.7}
+          roughness={0.2}
+          wireframe
+        />
+      </mesh>
+      <mesh ref={inner} rotation={[Math.PI / 2.6, 0, 0]}>
+        <icosahedronGeometry args={[0.82, 1]} />
+        <meshStandardMaterial
+          color="#070a12"
+          emissive="#22d3ee"
+          emissiveIntensity={0.7}
+          metalness={0.9}
+          roughness={0.05}
+          wireframe
+        />
+      </mesh>
+      <pointLight color="#8b5cf6" intensity={18} distance={8} />
+    </group>
+  )
+}
+
+function ProjectNode({
+  slug,
+  color,
+  position,
+  active,
+  reducedMotion,
+  onSelect,
+}: {
+  slug: ProjectSlug
+  color: string
+  position: [number, number, number]
+  active: boolean
+  reducedMotion: boolean
+  onSelect: (slug: ProjectSlug) => void
+}) {
+  const mesh = useRef<THREE.Mesh>(null)
+
+  useFrame((state, delta) => {
+    if (!mesh.current || reducedMotion) return
+    mesh.current.rotation.x += delta * 0.35
+    mesh.current.rotation.y += delta * 0.5
+    const pulse = 1 + Math.sin(state.clock.elapsedTime * 2.1) * 0.06
+    mesh.current.scale.setScalar(active ? pulse * 1.25 : pulse)
+  })
+
+  const select = (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation()
+    onSelect(slug)
+  }
+
+  return (
+    <Float
+      speed={reducedMotion ? 0 : 1.4}
+      rotationIntensity={reducedMotion ? 0 : 0.25}
+      floatIntensity={reducedMotion ? 0 : 0.35}
+    >
+      <mesh
+        ref={mesh}
+        position={position}
+        onClick={select}
+        onPointerOver={() => {
+          document.body.style.cursor = 'pointer'
+        }}
+        onPointerOut={() => {
+          document.body.style.cursor = ''
+        }}
+      >
+        <octahedronGeometry args={[active ? 0.38 : 0.28, 0]} />
+        <meshStandardMaterial
+          color={color}
+          emissive={color}
+          emissiveIntensity={active ? 3.2 : 1.5}
+          metalness={0.75}
+          roughness={0.18}
+        />
+      </mesh>
+    </Float>
+  )
+}
+
+function Scene({
+  state,
+  onProjectSelect,
+}: Pick<ThreeSceneProps, 'state' | 'onProjectSelect'>) {
+  const paths = useMemo(
+    () =>
+      projectNodes.map((node) => [
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(...node.position),
+      ]),
+    [],
+  )
+
+  return (
+    <>
+      <color attach="background" args={['#070a12']} />
+      <fog attach="fog" args={['#070a12', 6, 15]} />
+      <ambientLight intensity={0.34} />
+      <directionalLight position={[4, 7, 6]} intensity={2} color="#dbeafe" />
+      <Core reducedMotion={state.reducedMotion} />
+      {projectNodes.map((node, index) => (
+        <group key={node.slug}>
+          <Line
+            points={paths[index]}
+            color={node.color}
+            lineWidth={state.activeProject === node.slug ? 1.3 : 0.45}
+            transparent
+            opacity={state.mode === 'architecture' ? 0.75 : 0.28}
+          />
+          <ProjectNode
+            {...node}
+            active={state.activeProject === node.slug}
+            reducedMotion={state.reducedMotion}
+            onSelect={onProjectSelect}
+          />
+        </group>
+      ))}
+      <Sparkles
+        count={state.quality === 'low' ? 48 : 110}
+        scale={[12, 8, 6]}
+        size={1.8}
+        speed={state.reducedMotion ? 0 : 0.16}
+        color="#c4b5fd"
+      />
+      <AdaptiveDpr pixelated />
+    </>
+  )
+}
+
+export default function ThreeScene({
+  state,
+  paused,
+  onProjectSelect,
+}: ThreeSceneProps) {
+  const dpr: [number, number] =
+    state.quality === 'low'
+      ? [0.7, 1]
+      : state.quality === 'high'
+        ? [1, 1.75]
+        : [0.8, 1.4]
+
+  return (
+    <Canvas
+      aria-hidden="true"
+      camera={{ position: [0, 0.2, 7.5], fov: 48 }}
+      dpr={dpr}
+      frameloop={paused || state.reducedMotion ? 'demand' : 'always'}
+      gl={{
+        antialias: state.quality !== 'low',
+        alpha: false,
+        powerPreference: 'high-performance',
+      }}
+    >
+      <Scene state={state} onProjectSelect={onProjectSelect} />
+    </Canvas>
+  )
+}
