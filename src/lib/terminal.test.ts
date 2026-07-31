@@ -15,6 +15,35 @@ describe('executeTerminalCommand', () => {
     })
   })
 
+  it('opens and resets a project lab through aliases', () => {
+    expect(executeTerminalCommand('lab orbita', 'pt').intent).toEqual({
+      type: 'open-project',
+      projectSlug: 'orbitafire-vision',
+    })
+  })
+
+  it('parses sandbox commands into discriminated intents', () => {
+    expect(executeTerminalCommand('start ios', 'en').intent).toEqual({
+      type: 'sandbox-command',
+      command: { type: 'start', nodeId: 'ios' },
+    })
+    expect(executeTerminalCommand('hop contract', 'en').intent).toEqual({
+      type: 'sandbox-command',
+      command: { type: 'hop', nodeId: 'contract' },
+    })
+    for (const command of ['back', 'fail', 'recover', 'trace', 'reset']) {
+      expect(executeTerminalCommand(command, 'en').intent).toEqual({
+        type: 'sandbox-command',
+        command: { type: command },
+      })
+    }
+  })
+
+  it('requires a node for start and hop', () => {
+    expect(executeTerminalCommand('start', 'pt').intent).toBeUndefined()
+    expect(executeTerminalCommand('hop', 'en').lines[0]).toContain('node')
+  })
+
   it('opens known apps and rejects unknown apps', () => {
     expect(executeTerminalCommand('open architecture', 'en').intent).toEqual({
       type: 'open-app',

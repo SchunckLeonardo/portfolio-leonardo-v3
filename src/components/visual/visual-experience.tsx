@@ -9,7 +9,12 @@ import {
   useState,
 } from 'react'
 
-import type { ProjectSlug, VisualSceneState } from '@/types/portfolio'
+import type {
+  ProjectSlug,
+  SandboxCommand,
+  SandboxOutcome,
+  VisualSceneState,
+} from '@/types/portfolio'
 
 import { StaticSceneAdapter } from './static-scene-adapter'
 
@@ -21,6 +26,7 @@ const ThreeScene = dynamic(() => import('./three-scene'), {
 interface VisualExperienceProps {
   state: VisualSceneState
   onProjectSelect: (slug: ProjectSlug) => void
+  onSandboxCommand: (command: SandboxCommand) => SandboxOutcome
 }
 
 interface BoundaryProps {
@@ -60,6 +66,7 @@ function canUseWebGL() {
 export function VisualExperience({
   state,
   onProjectSelect,
+  onSandboxCommand,
 }: VisualExperienceProps) {
   const [supportsWebGL, setSupportsWebGL] = useState<boolean | null>(null)
   const [paused, setPaused] = useState(false)
@@ -77,7 +84,11 @@ export function VisualExperience({
   }, [])
 
   const fallback = (
-    <StaticSceneAdapter state={state} onProjectSelect={onProjectSelect} />
+    <StaticSceneAdapter
+      state={state}
+      onProjectSelect={onProjectSelect}
+      onSandboxCommand={onSandboxCommand}
+    />
   )
 
   if (supportsWebGL !== true) return fallback
@@ -88,6 +99,7 @@ export function VisualExperience({
         state={state}
         paused={paused}
         onProjectSelect={onProjectSelect}
+        onSandboxCommand={onSandboxCommand}
       />
     </VisualBoundary>
   )

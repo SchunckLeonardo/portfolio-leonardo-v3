@@ -23,11 +23,103 @@ export type AppId = (typeof appIds)[number]
 export type SceneMode = 'ambient' | 'architecture'
 export type VisualQuality = 'auto' | 'low' | 'high'
 
-export interface SceneIntent {
-  type: 'open-app' | 'open-project' | 'set-scene-mode'
-  appId?: AppId
-  projectSlug?: ProjectSlug
-  mode?: SceneMode
+export type SandboxCommand =
+  | { type: 'start'; nodeId: string }
+  | { type: 'hop'; nodeId: string }
+  | { type: 'back' }
+  | { type: 'fail' }
+  | { type: 'recover' }
+  | { type: 'trace' }
+  | { type: 'reset' }
+
+export type SandboxStatus = 'idle' | 'running' | 'completed' | 'failed'
+
+export type SandboxFeedbackCode =
+  | 'reset'
+  | 'started'
+  | 'hopped'
+  | 'back'
+  | 'failed'
+  | 'recovered'
+  | 'trace'
+  | 'completed'
+  | 'invalid-node'
+  | 'invalid-hop'
+  | 'not-started'
+  | 'no-history'
+  | 'blocked-by-failure'
+  | 'nothing-to-recover'
+
+export interface ArchitectureSandboxState {
+  projectSlug: ProjectSlug
+  status: SandboxStatus
+  path: string[]
+  edgePath: string[]
+  currentNodeId?: string
+  failedNodeId?: string
+  validNextNodeIds: string[]
+  revision: number
+}
+
+export interface SandboxFeedback {
+  code: SandboxFeedbackCode
+  nodeId?: string
+  fromNodeId?: string
+  toNodeId?: string
+  path: string[]
+  validNextNodeIds: string[]
+}
+
+export interface SandboxOutcome {
+  state: ArchitectureSandboxState
+  feedback: SandboxFeedback
+}
+
+export type SceneIntent =
+  | { type: 'open-app'; appId: AppId }
+  | { type: 'open-project'; projectSlug: ProjectSlug }
+  | { type: 'set-scene-mode'; mode: SceneMode }
+  | { type: 'sandbox-command'; command: SandboxCommand }
+
+export type ArchitectureNodeVisualState =
+  | 'idle'
+  | 'visited'
+  | 'current'
+  | 'available'
+  | 'failed'
+
+export type ArchitectureEdgeVisualState =
+  | 'idle'
+  | 'visited'
+  | 'current'
+  | 'available'
+  | 'failed'
+
+export interface ArchitectureVisualNode {
+  id: string
+  label: string
+  kind: ProjectArchitectureNode['kind']
+  x: number
+  y: number
+  state: ArchitectureNodeVisualState
+  start: boolean
+}
+
+export interface ArchitectureVisualEdge {
+  id: string
+  from: string
+  to: string
+  label?: string
+  state: ArchitectureEdgeVisualState
+}
+
+export interface ArchitectureVisualSignal {
+  projectSlug: ProjectSlug
+  accent: string
+  status: SandboxStatus
+  layout: 'layered' | 'radial'
+  nodes: ArchitectureVisualNode[]
+  edges: ArchitectureVisualEdge[]
 }
 
 export interface VisualSceneState {
@@ -36,6 +128,7 @@ export interface VisualSceneState {
   mode: SceneMode
   quality: VisualQuality
   reducedMotion: boolean
+  architecture?: ArchitectureVisualSignal
 }
 
 export interface ProjectArchitectureNode {
@@ -48,6 +141,11 @@ export interface ProjectArchitectureEdge {
   from: string
   to: string
   label?: string
+}
+
+export interface ProjectArchitecture {
+  nodes: ProjectArchitectureNode[]
+  edges: ProjectArchitectureEdge[]
 }
 
 export interface PortfolioProject {
@@ -64,10 +162,7 @@ export interface PortfolioProject {
   stack: string[]
   repository: string
   accent: string
-  architecture: {
-    nodes: ProjectArchitectureNode[]
-    edges: ProjectArchitectureEdge[]
-  }
+  architecture: ProjectArchitecture
 }
 
 export interface ExperienceEntry {

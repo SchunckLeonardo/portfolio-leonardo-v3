@@ -6,7 +6,7 @@ import { Rnd } from 'react-rnd'
 
 import type { getPortfolioContent } from '@/content/portfolio'
 import { useWindowStore } from '@/lib/window-store'
-import type { AppId, Locale, ProjectSlug } from '@/types/portfolio'
+import type { AppId, Locale, ProjectSlug, SceneIntent } from '@/types/portfolio'
 
 import { AppContent } from '../apps/app-content'
 
@@ -16,6 +16,7 @@ interface WindowManagerProps {
   content: Content
   locale: Locale
   onOpenProject: (slug: ProjectSlug) => void
+  onSceneIntent: (intent: SceneIntent) => string[]
 }
 
 function useMobileWindow() {
@@ -36,16 +37,17 @@ export function WindowManager({
   content,
   locale,
   onOpenProject,
+  onSceneIntent,
 }: WindowManagerProps) {
   const windows = useWindowStore((state) => state.windows)
   const activeProject = useWindowStore((state) => state.activeProject)
-  const openApp = useWindowStore((state) => state.openApp)
+  const sandbox = useWindowStore((state) => state.sandbox)
+  const dispatchSandbox = useWindowStore((state) => state.dispatchSandbox)
   const closeApp = useWindowStore((state) => state.closeApp)
   const minimizeApp = useWindowStore((state) => state.minimizeApp)
   const focusApp = useWindowStore((state) => state.focusApp)
   const toggleMaximize = useWindowStore((state) => state.toggleMaximize)
   const updateRect = useWindowStore((state) => state.updateRect)
-  const setSceneMode = useWindowStore((state) => state.setSceneMode)
   const mobile = useMobileWindow()
 
   return (
@@ -64,7 +66,7 @@ export function WindowManager({
             disableDragging={mobile || windowState.maximized}
             enableResizing={!mobile && !windowState.maximized}
             key={appId}
-            minWidth={420}
+            minWidth={mobile ? 0 : 420}
             minHeight={320}
             onDragStart={() => focusApp(appId)}
             onDragStop={(_, data) =>
@@ -146,9 +148,10 @@ export function WindowManager({
                   content={content}
                   locale={locale}
                   activeProject={activeProject}
-                  onOpenApp={openApp}
+                  sandbox={sandbox}
                   onOpenProject={onOpenProject}
-                  onSceneMode={setSceneMode}
+                  onSandboxCommand={dispatchSandbox}
+                  onSceneIntent={onSceneIntent}
                 />
               </div>
             </section>

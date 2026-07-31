@@ -1170,7 +1170,7 @@ kbd {
 
 .architecture-board {
   position: relative;
-  height: 330px;
+  height: 360px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 11px;
@@ -1193,13 +1193,48 @@ kbd {
   vector-effect: non-scaling-stroke;
 }
 
+.architecture-board marker path {
+  fill: rgba(139, 92, 246, 0.8);
+}
+
+.architecture-edge {
+  opacity: 0.38;
+  transition:
+    opacity 180ms ease,
+    stroke 180ms ease,
+    stroke-width 180ms ease;
+}
+
+.architecture-edge.is-available {
+  stroke: var(--cyan);
+  opacity: 0.82;
+}
+
+.architecture-edge.is-visited {
+  stroke: var(--violet-soft);
+  opacity: 0.72;
+}
+
+.architecture-edge.is-current {
+  stroke: #f8fafc;
+  stroke-width: 0.75;
+  opacity: 1;
+}
+
+.architecture-edge.is-failed {
+  stroke: #fb7185;
+  stroke-width: 0.7;
+  opacity: 1;
+}
+
 .architecture-node {
   position: absolute;
   z-index: 2;
   display: grid;
-  width: 16%;
+  width: 18%;
   min-width: 92px;
   min-height: 54px;
+  transform: translate(-50%, -50%);
   grid-template-columns: 16px 1fr;
   align-items: center;
   gap: 5px;
@@ -1207,7 +1242,60 @@ kbd {
   border: 1px solid rgba(139, 92, 246, 0.35);
   border-radius: 8px;
   background: rgba(14, 20, 36, 0.92);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.architecture-node:hover,
+.architecture-node:focus-visible {
+  transform: translate(-50%, -50%) scale(1.035);
+  border-color: var(--line-bright);
+  outline: none;
+}
+
+.architecture-node.is-available {
+  border-color: rgba(34, 211, 238, 0.8);
+  box-shadow:
+    0 0 20px rgba(34, 211, 238, 0.16),
+    0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.architecture-node.is-visited {
+  border-color: rgba(167, 139, 250, 0.7);
+}
+
+.architecture-node.is-current {
+  border-color: rgba(248, 250, 252, 0.94);
+  box-shadow:
+    0 0 0 2px rgba(139, 92, 246, 0.3),
+    0 0 28px rgba(139, 92, 246, 0.28);
+}
+
+.architecture-node.is-failed {
+  border-color: #fb7185;
+  box-shadow:
+    0 0 0 2px rgba(251, 113, 133, 0.18),
+    0 0 26px rgba(251, 113, 133, 0.24);
+}
+
+.architecture-node.is-start::after {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: var(--violet);
+  color: white;
+  content: 'START';
+  font-family: var(--font-mono);
+  font-size: 5px;
+  letter-spacing: 0.08em;
 }
 
 .architecture-node svg {
@@ -1229,7 +1317,8 @@ kbd {
   text-transform: uppercase;
 }
 
-.architecture-node--database {
+.architecture-node--database,
+.architecture-node--cloud {
   border-color: rgba(34, 211, 238, 0.45);
 }
 
@@ -1241,20 +1330,252 @@ kbd {
   border-color: rgba(251, 146, 60, 0.45);
 }
 
-.architecture-legend {
+.architecture-sandbox {
+  overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  border-radius: 12px;
+  background: rgba(5, 8, 16, 0.62);
+}
+
+.architecture-sandbox[data-status='failed'] {
+  border-color: rgba(251, 113, 133, 0.5);
+}
+
+.architecture-sandbox__status {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(8, 12, 22, 0.82);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.architecture-sandbox__status span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.architecture-sandbox__status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+.architecture-sandbox[data-status='failed'] .architecture-sandbox__status i {
+  background: #fb7185;
+  box-shadow: 0 0 8px #fb7185;
+}
+
+.architecture-sandbox__status code {
+  color: var(--subtle);
+  font-size: 8px;
+}
+
+.architecture-sandbox .architecture-board {
+  border: 0;
+  border-radius: 0;
+}
+
+.architecture-sandbox__controls {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 10px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
 }
 
-.architecture-legend span {
-  padding: 5px 7px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.03);
+.architecture-sandbox__controls button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 7px;
+  text-transform: uppercase;
+}
+
+.architecture-sandbox__controls button:hover:not(:disabled),
+.architecture-sandbox__controls button:focus-visible {
+  border-color: var(--line-bright);
+  color: var(--ink);
+}
+
+.architecture-sandbox__controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.34;
+}
+
+.architecture-sandbox__controls svg {
+  width: 10px;
+}
+
+.architecture-feedback {
+  min-height: 31px;
+  margin: 0;
+  padding: 0 12px 10px;
+  color: var(--subtle);
+  font-family: var(--font-mono);
+  font-size: 8px;
+}
+
+.architecture-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.architecture-inspector,
+.architecture-trace > section {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(8, 12, 22, 0.68);
+}
+
+.architecture-inspector {
+  padding: 16px;
+}
+
+.architecture-inspector__title {
+  margin: 12px 0 14px;
+}
+
+.architecture-inspector__title > span {
+  color: var(--violet-soft);
+  font-family: var(--font-mono);
+  font-size: 7px;
+  text-transform: uppercase;
+}
+
+.architecture-inspector h3 {
+  margin: 3px 0 0;
+  font-family: var(--font-display);
+  font-size: 17px;
+}
+
+.architecture-inspector dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.architecture-inspector dl > div {
+  padding-top: 9px;
+  border-top: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.architecture-inspector dt {
+  margin-bottom: 4px;
   color: var(--subtle);
   font-family: var(--font-mono);
   font-size: 7px;
+  text-transform: uppercase;
+}
+
+.architecture-inspector dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.architecture-trace {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.architecture-trace > section {
+  padding: 14px;
+}
+
+.architecture-trace ol {
+  display: grid;
+  gap: 5px;
+  max-height: 150px;
+  margin: 10px 0 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.architecture-trace li button,
+.architecture-connections button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 7px;
+  text-align: left;
+}
+
+.architecture-trace li button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 0;
+}
+
+.architecture-trace li button span {
+  color: var(--violet-soft);
+}
+
+.architecture-trace p {
+  margin: 10px 0 0;
+  color: var(--subtle);
+  font-size: 8px;
+}
+
+.architecture-connections {
+  display: grid;
+  gap: 5px;
+  max-height: 155px;
+  margin-top: 10px;
+  overflow: auto;
+}
+
+.architecture-connections button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  padding: 6px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 5px;
+}
+
+.architecture-connections button:hover,
+.architecture-connections button.is-current {
+  border-color: var(--line-bright);
+  color: var(--ink);
+}
+
+.architecture-connections button.is-available {
+  border-color: rgba(34, 211, 238, 0.38);
+}
+
+.architecture-connections button.is-failed {
+  border-color: rgba(251, 113, 133, 0.52);
+}
+
+.architecture-connections small {
+  color: var(--subtle);
+  font-size: 6px;
 }
 
 .case-overview {
@@ -1456,6 +1777,24 @@ kbd {
   caret-color: var(--cyan);
 }
 
+.terminal-app__form button {
+  padding: 6px 9px;
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  border-radius: 5px;
+  background: rgba(34, 211, 238, 0.06);
+  color: var(--cyan);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 7px;
+  text-transform: uppercase;
+}
+
+.terminal-app__form button:hover,
+.terminal-app__form button:focus-visible {
+  border-color: rgba(34, 211, 238, 0.72);
+  outline: none;
+}
+
 .contact-app,
 .soundscape-app {
   display: flex;
@@ -1647,6 +1986,79 @@ kbd {
   inset: 0;
 }
 
+.static-architecture__edges,
+.static-architecture__nodes {
+  position: absolute;
+  inset: 8% 8% 12%;
+  width: 84%;
+  height: 80%;
+}
+
+.static-architecture__edges {
+  overflow: visible;
+}
+
+.static-architecture__edges line {
+  stroke: rgba(139, 92, 246, 0.34);
+  stroke-width: 0.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.static-architecture__edges line.is-available {
+  stroke: var(--cyan);
+  stroke-width: 0.5;
+}
+
+.static-architecture__edges line.is-current {
+  stroke: #f8fafc;
+  stroke-width: 0.7;
+}
+
+.static-architecture__edges line.is-failed {
+  stroke: #fb7185;
+  stroke-width: 0.7;
+}
+
+.static-architecture-node {
+  position: absolute;
+  display: flex;
+  max-width: 140px;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid rgba(139, 92, 246, 0.32);
+  border-radius: 6px;
+  background: rgba(8, 12, 22, 0.84);
+  color: var(--subtle);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 7px;
+  text-align: left;
+  backdrop-filter: blur(8px);
+}
+
+.static-architecture-node.is-available {
+  border-color: rgba(34, 211, 238, 0.72);
+  color: var(--ink);
+}
+
+.static-architecture-node.is-current {
+  border-color: #f8fafc;
+  color: #f8fafc;
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.28);
+}
+
+.static-architecture-node.is-failed {
+  border-color: #fb7185;
+  color: #fecdd3;
+}
+
+.static-architecture-node.is-start {
+  outline: 1px solid rgba(167, 139, 250, 0.48);
+  outline-offset: 3px;
+}
+
 .static-node {
   position: absolute;
   display: flex;
@@ -1707,6 +2119,37 @@ kbd {
 
 .node-orbita .static-node__signal {
   background: var(--orange);
+}
+
+.three-node-label {
+  display: block;
+  width: max-content;
+  max-width: 150px;
+  padding: 3px 5px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 4px;
+  background: rgba(7, 10, 18, 0.78);
+  color: var(--subtle);
+  font-family: var(--font-mono);
+  font-size: 6px;
+  letter-spacing: 0.03em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.three-node-label.is-current {
+  border-color: rgba(248, 250, 252, 0.78);
+  color: #f8fafc;
+}
+
+.three-node-label.is-available {
+  border-color: rgba(34, 211, 238, 0.72);
+  color: #cffafe;
+}
+
+.three-node-label.is-failed {
+  border-color: rgba(251, 113, 133, 0.75);
+  color: #fecdd3;
 }
 
 .visual-loading {
@@ -1961,6 +2404,10 @@ kbd {
     overflow: auto;
   }
 
+  .architecture-workbench {
+    grid-template-columns: 1fr;
+  }
+
   .architecture-node {
     width: 24%;
   }
@@ -2018,6 +2465,16 @@ kbd {
 
   .architecture-node span {
     font-size: 7px;
+  }
+
+  .architecture-sandbox__status code {
+    display: none;
+  }
+
+  .static-architecture-node {
+    max-width: 92px;
+    padding: 4px 5px;
+    font-size: 6px;
   }
 
   .contact-app,

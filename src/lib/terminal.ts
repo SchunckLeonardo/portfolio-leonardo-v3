@@ -23,7 +23,9 @@ const messages = {
     help: [
       'COMANDOS',
       'about · experience · projects · skills · contact · cv',
-      'open <app> · visualize <projeto> · theme · sound · clear',
+      'open <app> · lab <projeto> · visualize <projeto>',
+      'start <nó> · hop <nó> · back · fail · recover · trace · reset',
+      'theme · sound · clear',
       'Dica: tente “sudo hire leonardo”.',
     ],
     about:
@@ -41,6 +43,7 @@ const messages = {
       'Projeto não encontrado. Use: yomora, hermes, solar ou orbita.',
     appNotFound:
       'App não encontrado. Use: profile, projects, architecture, terminal, skills, soundscape ou contact.',
+    nodeRequired: 'Informe um nó. Exemplo: start ios ou hop contract.',
     hired:
       'Permissão concedida. Próximo passo: leonardoschunckrainha@gmail.com',
     theme:
@@ -51,7 +54,9 @@ const messages = {
     help: [
       'COMMANDS',
       'about · experience · projects · skills · contact · cv',
-      'open <app> · visualize <project> · theme · sound · clear',
+      'open <app> · lab <project> · visualize <project>',
+      'start <node> · hop <node> · back · fail · recover · trace · reset',
+      'theme · sound · clear',
       'Tip: try “sudo hire leonardo”.',
     ],
     about:
@@ -67,6 +72,7 @@ const messages = {
     projectNotFound: 'Project not found. Use: yomora, hermes, solar or orbita.',
     appNotFound:
       'App not found. Use: profile, projects, architecture, terminal, skills, soundscape or contact.',
+    nodeRequired: 'Provide a node. Example: start ios or hop contract.',
     hired: 'Permission granted. Next step: leonardoschunckrainha@gmail.com',
     theme:
       'Theme: LeoCode OS / neon glass. The system already chose dark mode.',
@@ -128,15 +134,40 @@ export function executeTerminalCommand(
     }
     return { lines: [copy.appNotFound] }
   }
-  if (command === 'visualize') {
+  if (command === 'visualize' || command === 'lab') {
     const slug = aliases[argument]
     if (slug && projectSlugs.includes(slug)) {
       return {
-        lines: [`visualize: ${slug}`],
+        lines: [`${command}: ${slug}`],
         intent: { type: 'open-project', projectSlug: slug },
       }
     }
     return { lines: [copy.projectNotFound] }
+  }
+  if (command === 'start' || command === 'hop') {
+    if (!argument) return { lines: [copy.nodeRequired] }
+    return {
+      lines: [],
+      intent: {
+        type: 'sandbox-command',
+        command: { type: command, nodeId: argument },
+      },
+    }
+  }
+  if (
+    command === 'back' ||
+    command === 'fail' ||
+    command === 'recover' ||
+    command === 'trace' ||
+    command === 'reset'
+  ) {
+    return {
+      lines: [],
+      intent: {
+        type: 'sandbox-command',
+        command: { type: command },
+      },
+    }
   }
   return { lines: [copy.notFound] }
 }

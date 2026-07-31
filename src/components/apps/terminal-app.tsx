@@ -3,12 +3,11 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 
 import { executeTerminalCommand } from '@/lib/terminal'
-import type { AppId, Locale, ProjectSlug, SceneIntent } from '@/types/portfolio'
+import type { Locale, SceneIntent } from '@/types/portfolio'
 
 interface TerminalAppProps {
   locale: Locale
-  onOpenApp: (appId: AppId) => void
-  onOpenProject: (slug: ProjectSlug) => void
+  onSceneIntent: (intent: SceneIntent) => string[]
 }
 
 interface TerminalLine {
@@ -16,11 +15,7 @@ interface TerminalLine {
   value: string
 }
 
-export function TerminalApp({
-  locale,
-  onOpenApp,
-  onOpenProject,
-}: TerminalAppProps) {
+export function TerminalApp({ locale, onSceneIntent }: TerminalAppProps) {
   const [command, setCommand] = useState('')
   const [lines, setLines] = useState<TerminalLine[]>([
     {
@@ -37,22 +32,17 @@ export function TerminalApp({
     endRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [lines])
 
-  const dispatchIntent = (intent?: SceneIntent) => {
-    if (intent?.type === 'open-app' && intent.appId) onOpenApp(intent.appId)
-    if (intent?.type === 'open-project' && intent.projectSlug) {
-      onOpenProject(intent.projectSlug)
-    }
-  }
-
   const submit = (event: FormEvent) => {
     event.preventDefault()
     const result = executeTerminalCommand(command, locale)
+    const intentLines = result.intent ? onSceneIntent(result.intent) : []
     const nextLines: TerminalLine[] = [
       { type: 'input', value: command },
-      ...result.lines.map((value): TerminalLine => ({ type: 'output', value })),
+      ...[...result.lines, ...intentLines].map(
+        (value): TerminalLine => ({ type: 'output', value }),
+      ),
     ]
     setLines(result.clear ? [] : (current) => [...current, ...nextLines])
-    dispatchIntent(result.intent)
     setCommand('')
   }
 
@@ -84,6 +74,7 @@ export function TerminalApp({
           value={command}
           onChange={(event) => setCommand(event.target.value)}
         />
+        <button type="submit">{locale === 'pt' ? 'Executar' : 'Run'}</button>
       </form>
     </div>
   )

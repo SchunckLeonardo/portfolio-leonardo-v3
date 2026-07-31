@@ -2,13 +2,22 @@
 
 import { create } from 'zustand'
 
+import { architectureCatalog } from '@/content/architecture'
 import type {
   AppId,
+  ArchitectureSandboxState,
   ProjectSlug,
+  SandboxCommand,
+  SandboxOutcome,
   SceneMode,
   WindowRect,
   WindowState,
 } from '@/types/portfolio'
+
+import {
+  createArchitectureSandboxState,
+  dispatchSandbox as runSandboxCommand,
+} from './architecture-sandbox'
 
 const defaultRects: Record<AppId, WindowRect> = {
   profile: { x: 104, y: 76, width: 720, height: 600 },
@@ -41,6 +50,7 @@ interface WindowStore {
   topZ: number
   activeProject: ProjectSlug
   sceneMode: SceneMode
+  sandbox: ArchitectureSandboxState
   openApp: (appId: AppId) => void
   closeApp: (appId: AppId) => void
   minimizeApp: (appId: AppId) => void
@@ -48,15 +58,17 @@ interface WindowStore {
   toggleMaximize: (appId: AppId) => void
   updateRect: (appId: AppId, rect: WindowRect) => void
   selectProject: (slug: ProjectSlug) => void
+  dispatchSandbox: (command: SandboxCommand) => SandboxOutcome
   setSceneMode: (mode: SceneMode) => void
   resetDesktop: () => void
 }
 
-export const useWindowStore = create<WindowStore>((set) => ({
+export const useWindowStore = create<WindowStore>((set, get) => ({
   windows: makeWindows(),
   topZ: 1,
   activeProject: 'yomora',
   sceneMode: 'ambient',
+  sandbox: createArchitectureSandboxState('yomora'),
 
   openApp: (appId) =>
     set((state) => {
@@ -139,7 +151,21 @@ export const useWindowStore = create<WindowStore>((set) => ({
     })),
 
   selectProject: (activeProject) =>
-    set({ activeProject, sceneMode: 'architecture' }),
+    set({
+      activeProject,
+      sceneMode: 'architecture',
+      sandbox: createArchitectureSandboxState(activeProject),
+    }),
+  dispatchSandbox: (command) => {
+    const current = get().sandbox
+    const result = runSandboxCommand(
+      command,
+      current,
+      architectureCatalog[current.projectSlug],
+    )
+    set({ sandbox: result.state })
+    return result
+  },
   setSceneMode: (sceneMode) => set({ sceneMode }),
   resetDesktop: () =>
     set({
@@ -147,6 +173,7 @@ export const useWindowStore = create<WindowStore>((set) => ({
       topZ: 1,
       activeProject: 'yomora',
       sceneMode: 'ambient',
+      sandbox: createArchitectureSandboxState('yomora'),
     }),
 }))
 

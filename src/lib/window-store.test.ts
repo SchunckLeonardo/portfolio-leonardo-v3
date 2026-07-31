@@ -27,8 +27,31 @@ describe('window store', () => {
 
     expect(state.activeProject).toBe('solar-beat-lab')
     expect(state.sceneMode).toBe('architecture')
+    expect(state.sandbox.projectSlug).toBe('solar-beat-lab')
+    expect(state.sandbox.status).toBe('idle')
     expect(() =>
-      JSON.stringify({ windows: state.windows, project: state.activeProject }),
+      JSON.stringify({
+        windows: state.windows,
+        project: state.activeProject,
+        sandbox: state.sandbox,
+      }),
     ).not.toThrow()
+  })
+
+  it('dispatches sandbox commands through the shared store state', () => {
+    useWindowStore.getState().selectProject('yomora')
+    useWindowStore.getState().dispatchSandbox({ type: 'start', nodeId: 'ios' })
+    useWindowStore
+      .getState()
+      .dispatchSandbox({ type: 'hop', nodeId: 'contract' })
+
+    expect(useWindowStore.getState().sandbox.path).toEqual(['ios', 'contract'])
+
+    useWindowStore.getState().selectProject('hermes-news')
+    expect(useWindowStore.getState().sandbox).toMatchObject({
+      projectSlug: 'hermes-news',
+      status: 'idle',
+      path: [],
+    })
   })
 })

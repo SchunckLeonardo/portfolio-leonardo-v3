@@ -23,12 +23,18 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { architectureCatalog } from '@/content/architecture'
 import { getPortfolioContent } from '@/content/portfolio'
+import {
+  createArchitectureVisualSignal,
+  formatSandboxOutcome,
+} from '@/lib/architecture-sandbox'
 import { useWindowStore } from '@/lib/window-store'
 import type {
   AppId,
   Locale,
   ProjectSlug,
+  SceneIntent,
   VisualQuality,
 } from '@/types/portfolio'
 
@@ -61,9 +67,12 @@ export function LeoCodeOS({
   const windows = useWindowStore((state) => state.windows)
   const activeProject = useWindowStore((state) => state.activeProject)
   const sceneMode = useWindowStore((state) => state.sceneMode)
+  const sandbox = useWindowStore((state) => state.sandbox)
   const openApp = useWindowStore((state) => state.openApp)
   const focusApp = useWindowStore((state) => state.focusApp)
   const selectProject = useWindowStore((state) => state.selectProject)
+  const dispatchSandbox = useWindowStore((state) => state.dispatchSandbox)
+  const setSceneMode = useWindowStore((state) => state.setSceneMode)
   const [launcherOpen, setLauncherOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [booting, setBooting] = useState(true)
@@ -77,6 +86,33 @@ export function LeoCodeOS({
       openApp('architecture')
     },
     [openApp, selectProject],
+  )
+
+  const handleSceneIntent = useCallback(
+    (intent: SceneIntent) => {
+      if (intent.type === 'open-app') {
+        openApp(intent.appId)
+        return []
+      }
+      if (intent.type === 'open-project') {
+        openProject(intent.projectSlug)
+        return []
+      }
+      if (intent.type === 'set-scene-mode') {
+        setSceneMode(intent.mode)
+        return []
+      }
+
+      const result = dispatchSandbox(intent.command)
+      return [
+        formatSandboxOutcome(
+          result,
+          locale,
+          architectureCatalog[result.state.projectSlug],
+        ),
+      ]
+    },
+    [dispatchSandbox, locale, openApp, openProject, setSceneMode],
   )
 
   useEffect(() => {
@@ -181,6 +217,18 @@ export function LeoCodeOS({
       .toLowerCase()
       .includes(query.toLowerCase()),
   )
+  const activeProjectContent =
+    content.projects.find((project) => project.slug === activeProject) ??
+    content.projects[0]
+  const architectureSignal = useMemo(
+    () =>
+      createArchitectureVisualSignal(
+        sandbox,
+        activeProjectContent.accent,
+        activeProjectContent.architecture,
+      ),
+    [activeProjectContent, sandbox],
+  )
 
   return (
     <main className="leocode-os">
@@ -195,8 +243,10 @@ export function LeoCodeOS({
             mode: sceneMode,
             quality,
             reducedMotion,
+            architecture: architectureSignal,
           }}
           onProjectSelect={openProject}
+          onSandboxCommand={dispatchSandbox}
         />
       </div>
       <div className="visual-vignette" aria-hidden="true" />
@@ -319,6 +369,7 @@ export function LeoCodeOS({
           content={content}
           locale={locale}
           onOpenProject={openProject}
+          onSceneIntent={handleSceneIntent}
         />
       </section>
 

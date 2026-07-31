@@ -6,6 +6,8 @@ import type {
   SkillGroup,
 } from '@/types/portfolio'
 
+import { architectureCatalog } from './architecture'
+
 const repositories = {
   yomora: 'https://github.com/SchunckLeonardo/Yomora',
   hermes: 'https://github.com/SchunckLeonardo/hermes-news',
@@ -27,31 +29,7 @@ const commonProjectData = {
     ],
     repository: repositories.yomora,
     accent: '#8b5cf6',
-    architecture: {
-      nodes: [
-        { id: 'ios', label: 'iOS · SwiftUI', kind: 'client' as const },
-        { id: 'contract', label: 'OpenAPI /api/v1', kind: 'module' as const },
-        {
-          id: 'identity',
-          label: 'Identity',
-          kind: 'module' as const,
-        },
-        { id: 'reading', label: 'Reading', kind: 'module' as const },
-        { id: 'social', label: 'Social', kind: 'module' as const },
-        { id: 'postgres', label: 'PostgreSQL', kind: 'database' as const },
-        { id: 's3', label: 'Private S3', kind: 'cloud' as const },
-      ],
-      edges: [
-        { from: 'ios', to: 'contract', label: 'HTTPS' },
-        { from: 'contract', to: 'identity' },
-        { from: 'contract', to: 'reading' },
-        { from: 'contract', to: 'social' },
-        { from: 'identity', to: 'postgres' },
-        { from: 'reading', to: 'postgres' },
-        { from: 'social', to: 'postgres' },
-        { from: 'identity', to: 's3', label: 'signed URLs' },
-      ],
-    },
+    architecture: architectureCatalog.yomora,
   },
   hermes: {
     slug: 'hermes-news' as const,
@@ -66,28 +44,7 @@ const commonProjectData = {
     ],
     repository: repositories.hermes,
     accent: '#22d3ee',
-    architecture: {
-      nodes: [
-        { id: 'feeds', label: 'RSS + Hacker News', kind: 'external' as const },
-        { id: 'news', label: 'Collection', kind: 'module' as const },
-        { id: 'ranking', label: 'Ranking + Feedback', kind: 'module' as const },
-        { id: 'ai', label: 'Spring AI + Ollama', kind: 'external' as const },
-        { id: 'outbox', label: 'Durable Outbox', kind: 'queue' as const },
-        { id: 'whatsapp', label: 'WhatsApp', kind: 'external' as const },
-        { id: 'postgres', label: 'PostgreSQL', kind: 'database' as const },
-        { id: 'redis', label: 'Redis', kind: 'database' as const },
-      ],
-      edges: [
-        { from: 'feeds', to: 'news' },
-        { from: 'news', to: 'ranking' },
-        { from: 'ranking', to: 'ai' },
-        { from: 'ai', to: 'outbox' },
-        { from: 'outbox', to: 'whatsapp' },
-        { from: 'ranking', to: 'postgres' },
-        { from: 'outbox', to: 'postgres' },
-        { from: 'news', to: 'redis' },
-      ],
-    },
+    architecture: architectureCatalog['hermes-news'],
   },
   solar: {
     slug: 'solar-beat-lab' as const,
@@ -95,27 +52,7 @@ const commonProjectData = {
     stack: ['Next.js', 'React', 'TypeScript', 'Three.js', 'Tone.js', 'Zustand'],
     repository: repositories.solar,
     accent: '#f472b6',
-    architecture: {
-      nodes: [
-        { id: 'ui', label: 'React UI', kind: 'client' as const },
-        { id: 'store', label: 'Serializable Store', kind: 'module' as const },
-        { id: 'audio', label: 'Tone Transport', kind: 'module' as const },
-        { id: 'scene', label: 'R3F Scene', kind: 'module' as const },
-        {
-          id: 'persistence',
-          label: 'Project Repository',
-          kind: 'database' as const,
-        },
-        { id: 'export', label: 'MIDI + WAV', kind: 'external' as const },
-      ],
-      edges: [
-        { from: 'ui', to: 'store' },
-        { from: 'store', to: 'audio' },
-        { from: 'audio', to: 'scene', label: 'scheduled time' },
-        { from: 'store', to: 'persistence' },
-        { from: 'store', to: 'export' },
-      ],
-    },
+    architecture: architectureCatalog['solar-beat-lab'],
   },
   orbita: {
     slug: 'orbitafire-vision' as const,
@@ -130,27 +67,7 @@ const commonProjectData = {
     ],
     repository: repositories.orbita,
     accent: '#fb923c',
-    architecture: {
-      nodes: [
-        {
-          id: 'dataset',
-          label: 'Satellite Dataset',
-          kind: 'database' as const,
-        },
-        { id: 'pipeline', label: 'Training Pipeline', kind: 'module' as const },
-        { id: 'simple', label: 'Simple CNN', kind: 'module' as const },
-        { id: 'deep', label: 'Deep CNN', kind: 'module' as const },
-        { id: 'model', label: 'Selected Model', kind: 'module' as const },
-        { id: 'app', label: 'Streamlit Demo', kind: 'client' as const },
-      ],
-      edges: [
-        { from: 'dataset', to: 'pipeline' },
-        { from: 'pipeline', to: 'simple' },
-        { from: 'pipeline', to: 'deep' },
-        { from: 'simple', to: 'model', label: '89.39%' },
-        { from: 'model', to: 'app' },
-      ],
-    },
+    architecture: architectureCatalog['orbitafire-vision'],
   },
 }
 
@@ -594,7 +511,7 @@ const copy = {
       'Quatro produtos que conectam domínio, arquitetura, confiabilidade e experiência.',
     architectureTitle: 'Architecture Lab',
     architectureLead:
-      'Selecione um projeto para explorar seus módulos e fluxos. A mesma topologia é refletida na cena 3D.',
+      'Inicie um pacote em qualquer nó, percorra conexões válidas e injete falhas. A mesma sessão é refletida na cena 3D.',
     terminalTitle: 'Terminal',
     terminalHint: 'Digite help para listar comandos.',
     skillsTitle: 'System Monitor',
@@ -652,7 +569,7 @@ const copy = {
       'Four products connecting domain, architecture, reliability and experience.',
     architectureTitle: 'Architecture Lab',
     architectureLead:
-      'Select a project to explore its modules and flows. The same topology is reflected in the 3D scene.',
+      'Start a packet at any node, follow valid connections and inject failures. The same session is reflected in the 3D scene.',
     terminalTitle: 'Terminal',
     terminalHint: 'Type help to list commands.',
     skillsTitle: 'System Monitor',
